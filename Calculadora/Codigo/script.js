@@ -1,7 +1,7 @@
 //Inicializa o valor da tela como vazio
 tela = ""
 
-//
+//digita o valores na tela
 function preencher(tela){
     document.getElementById('tela').innerHTML = tela;
 }
@@ -18,7 +18,7 @@ function apagar(){
     preencher(tela);
 }
 
-//apaga todas as informações preenchidas na tela
+//limpa todas informações preenchidas na tela
 function limpar(){
     tela = ''
     preencher(tela);
@@ -27,7 +27,7 @@ function limpar(){
 //Exibe o valor do calculo na tela
 function calcular(){
     calculo = tela;
-    resultado = eval(calculo);
-    tela = resultado
-    preencher(resultado);
+    resultado = eval(calculo); //eval faz com que a variavel venha ser intepretado como codigo
+    tela = resultado;
+    preencher(tela);
 }
