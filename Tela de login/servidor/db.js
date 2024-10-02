@@ -7,10 +7,10 @@ PGPASSWORD = decodeURIComponent(PGPASSWORD);
 const sql = postgres({
   host: PGHOST,
   database: PGDATABASE,
-  user: PGUSER,  // Substitua 'username' por 'user'
+  username: PGUSER,
   password: PGPASSWORD,
-  port: 3000,
-  ssl: { rejectUnauthorized: false },  // Corrigir configuração SSL, se necessário
+  port: 5432,
+  ssl: 'require',
   connection: {
     options: `project=${ENDPOINT_ID}`,
   },

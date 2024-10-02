@@ -1,26 +1,30 @@
-function validar() {
+async function validar() {
     const usuario = document.querySelector("#Usuario").value;
     const senha = document.querySelector("#Senha").value;
-    if (usuario == 123 && senha == 123) {
-        window.alert("usuario: " + usuario + "\nsenha: " + senha + "\nLOGIN CORRETO!!!");
-    }
-    else {
-        window.alert("usuario: " + usuario + "\nsenha: " + senha + "\nLOGIN INCORRETO!!!");
-    }
-}
-function cadastrar() {
-    //recebe os valores da tela de cadastro
-    const nome = document.querySelector("#Nome").value;
-    const usuario = document.querySelector("#Usuario").value;
-    const senha = document.querySelector("#Senha").value;
-    const sexoSelecionado = document.querySelector('input[name="sexo"]:checked').value;
 
+    // Fazendo a requisição para a URL
+    fetch(`http://localhost:3000/usuarios?search=${usuario}`)
+        .then(response => response.json()) // Converte a resposta em JSON
+        .then(data => {
+            // Atribui
+            const resultado = data;
 
-    if (nome && usuario && senha && sexoSelecionado) {
-        // Exibe o valor no console ou pode usar em qualquer outra lógica
-        alert('Nome: ' + nome + '\nUsuario: ' + usuario + '\nSenha: ' + senha + '\nSexo selecionado: ' + sexoSelecionado);
-    }
-    else {
-        alert('Favor preencher todos os campos');
-    }
+            // Verifica se algum resultado foi encontrado
+            if (resultado.length > 0) {
+                // Exibindo o nome do primeiro resultado no alert
+                if(senha == resultado[0].senha){
+                window.alert(`Login efetuado com sucesso, seja bem vindo(a) (${resultado[0].usuario})`);
+            }
+            else{
+                window.alert(`Senha do usuario (${resultado[0].usuario}) esta incorreta`);
+            }
+            } else {
+                // Se nenhum resultado for encontrado, exibe uma mensagem de erro
+                window.alert(`Nenhum usuário (${usuario}) encontrado.`);
+            }
+        })
+        .catch(error => {
+            // Tratamento de erro, caso a requisição falhe
+            window.alert('Erro ao buscar os dados: ' + error);
+        });
 }
