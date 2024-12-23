@@ -20,6 +20,12 @@ async function validar() {
                     // Exibindo o nome do primeiro resultado no alert
                     if (senha == resultado[0].senha) {
                         window.alert(`Login efetuado com sucesso, seja bem vindo(a) (${resultado[0].usuario})`);
+                        // Salva no localStorage indicando que o usuário está logado
+                        localStorage.setItem("isLoggedIn", "true");
+                        localStorage.setItem("id", resultado[0].id);
+
+                        // Redireciona para a tela principal
+                        window.location.href = "principal.html";
                     }
                     else {
                         window.alert(`Senha do usuario (${resultado[0].usuario}) esta incorreta`);
