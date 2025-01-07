@@ -4,20 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <script>
-        // Verifica se o usuário está logado
-        if (!localStorage.getItem("isLoggedIn")) {
-            // Se não estiver, redireciona para a tela de login
-            window.location.href = "login.html";
-        }
-    </script>
+    <script src="script.js"></script>
 </head>
-<body>
+<body onload="verificaLogin()" onload="buscarNotas()">
     <div id="INFO"></div>
 
     <script>
         // Recupera o id do usuário armazenado
-        const userId = localStorage.getItem("id");
+        const userId = sessionStorage.getItem("id");
 
         // Exibe o ID do Usuário, se disponível
         if (userId) {
@@ -26,5 +20,8 @@
             document.getElementById("INFO").innerHTML = "<p>Usuário não encontrado.</p>";
         }
     </script>
+
+<!-- Lista aninhada -->
+
 </body>
 </html>
