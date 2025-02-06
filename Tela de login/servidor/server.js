@@ -60,15 +60,22 @@ const userRoutes = (server, database) => {
 const noteRoutes = (server, database) => {
     // Rota para criar uma anotação
     server.post('/anotacoes', async (request, reply) => {
-        const { titulo, conteudo } = request.body;
-
-        await database.createNote({
-            titulo,
-            conteudo,
-        });
-
-        return reply.status(201).send();
+        const id_usuario = "3d927e4f-6932-495c-a5ac-5fff700dc9ca";
+        const { titulo, texto } = request.body;
+    
+        try {
+            await database.createNotes({
+                id_usuario,
+                titulo,
+                texto,
+            });
+            return reply.status(201).send({ message: "Nota criada com sucesso!" });
+        } catch (error) {
+            console.error("Erro ao criar anotação:", error);
+            return reply.status(500).send({ error: "Erro interno ao criar anotação." });
+        }
     });
+    
 
     // Rota para listar anotações
     server.get('/anotacoes', async (request, reply) => {
@@ -79,15 +86,17 @@ const noteRoutes = (server, database) => {
 
     // Rota para atualizar uma anotação
     server.put('/anotacoes/:id', async (request, reply) => {
-        const anotacaoID = request.params.id; //atribui o ID da anotação que foi passada
-        const { titulo, conteudo } = request.body;
+     // Obtém o ID da anotação a partir da URL
+        const anotacaoID = request.params.id
 
-        await database.updateNote(anotacaoID, {
+        const { titulo, texto } = request.body; // Extrai o título e o conteúdo do corpo da requisição
+        
+            await database.updateNotes (anotacaoID, {
             titulo,
-            conteudo,
+            texto // Corrigido para usar "conteudo" em vez de "texto"
         });
-
-        return reply.status(204).send();
+    
+        return reply.status(204).send(); // Retorna uma resposta sem conteúdo (204)
     });
 
     // Rota para deletar uma anotação

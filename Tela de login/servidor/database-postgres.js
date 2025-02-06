@@ -51,6 +51,13 @@ export class DatabasePostgres {
         `
     }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+
+
     /*ANOTAÇÕES*/
     async listNotes(search) {
         let anotacoes
@@ -60,36 +67,36 @@ export class DatabasePostgres {
             select *
             from anotacao
             where id_usuario = ${search}
+             ORDER BY updated_at DESC
             `   
         } else {
             anotacoes = await sql`
             select *
             from anotacao
+            ORDER BY updated_at DESC
             `
         }
     
         return anotacoes;
     }
     
-    async createNotes(login) {
-        const usuarioID = randomUUID()
-
-        const { nome, usuario, senha, sexo } = login;
+    async createNotes(dados) {
+        const { id_usuario, titulo, texto } = dados;
 
         await sql`
-        insert into usuarios (id, nome, usuario, senha, sexo)
-        VALUES (${usuarioID}, ${nome}, ${usuario}, ${senha}, ${sexo})
+        insert into anotacao (id_usuario, titulo, texto)
+        VALUES (${id_usuario}, ${titulo}, ${texto})
         `
     }
 
-    async updateNotes(id, login) {
-        const { nome, usuario, senha, sexo } = login;
+    async updateNotes(id_anotacao, dados) {
+        const { titulo, texto } = dados;
 
         await sql`
-        update usuarios
-        set nome = ${nome}, usuario = ${usuario}, senha = ${senha}, sexo = ${sexo}
-        where id = ${id}
-        ` 
+        update anotacao
+        set titulo = ${titulo}, texto = ${texto}
+        where id_anotacao = ${id_anotacao}
+        `
     }
 
     async deleteNotes(id, usuario_id) {
