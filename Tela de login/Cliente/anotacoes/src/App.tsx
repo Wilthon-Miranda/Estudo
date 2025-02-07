@@ -13,7 +13,7 @@ const Anotacoes = () => {
     salvarNovaAnotacao,
     salvar,
   } = useAnotacoes();
-
+  
   return (
     <div className="container">
       <div className="anotacao">
@@ -36,7 +36,7 @@ const Anotacoes = () => {
           Salvar
         </button>
       </div>
-
+     
       {anotacoes.length > 0 &&
         anotacoes.map((anotacao) => (
           <div key={anotacao.id_anotacao} className="anotacao">

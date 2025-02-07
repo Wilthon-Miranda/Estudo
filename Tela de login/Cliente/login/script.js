@@ -19,26 +19,28 @@ async function validar() {
                 if (resultado.length > 0) {
                     // Exibindo o nome do primeiro resultado no alert
                     if (senha == resultado[0].senha) {
+                        // Após o login bem-sucedido
                         window.alert(`Login efetuado com sucesso, seja bem vindo(a) (${resultado[0].usuario})`);
-                        // Salva no localStorage indicando que o usuário está logado
-                        sessionStorage.setItem("isLoggedIn", "true");
-                        sessionStorage.setItem("id", resultado[0].id);
 
-                        // Redireciona para a tela principal
-                        window.location.href = "../principal.html";
+                        // Salva no localStorage indicando que o usuário está logado
+                        localStorage.setItem("isLoggedIn", "true");
+
+                        // Redireciona para a tela principal com o ID na URL
+                        const id = resultado[0].id;
+                        window.location.href = `http://localhost:5173/Cliente/anotacoes/index.html?id=${encodeURIComponent(id)}`;
                     }
                     else {
-                        window.alert(`Senha do usuario (${resultado[0].usuario}) esta incorreta`);
-                        sessionStorage.removeItem('isLoggedIn');
-                        sessionStorage.removeItem('id');
+                            window.alert(`Senha do usuario (${resultado[0].usuario}) esta incorreta`);
+                            localStorage.removeItem('isLoggedIn');
+                            localStorage.removeItem('id');
+                        }
+                    } else {
+                        // Se nenhum resultado for encontrado, exibe uma mensagem de erro
+                        window.alert(`Nenhum usuário (${usuario}) encontrado.`);
+                        localStorage.removeItem('isLoggedIn');
+                        localStorage.removeItem('id');
                     }
-                } else {
-                    // Se nenhum resultado for encontrado, exibe uma mensagem de erro
-                    window.alert(`Nenhum usuário (${usuario}) encontrado.`);
-                    sessionStorage.removeItem('isLoggedIn');
-                    sessionStorage.removeItem('id');
-                }
-            })
+                })
             .catch(error => {
                 // Tratamento de erro, caso a requisição falhe
                 window.alert('Erro ao buscar os dados: ' + error);

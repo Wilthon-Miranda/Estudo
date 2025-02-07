@@ -57,11 +57,10 @@ const userRoutes = (server, database) => {
 };
 
 // Função para agrupar as rotas de anotações
-const noteRoutes = (server, database) => {
+const noteRoutes = (serverAnotacao, database) => {
     // Rota para criar uma anotação
-    server.post('/anotacoes', async (request, reply) => {
-        const id_usuario = "3d927e4f-6932-495c-a5ac-5fff700dc9ca";
-        const { titulo, texto } = request.body;
+    serverAnotacao.post('/anotacoes', async (request, reply) => {
+        const { id_usuario ,titulo, texto } = request.body;
     
         try {
             await database.createNotes({
@@ -75,17 +74,17 @@ const noteRoutes = (server, database) => {
             return reply.status(500).send({ error: "Erro interno ao criar anotação." });
         }
     });
-    
 
     // Rota para listar anotações
-    server.get('/anotacoes', async (request, reply) => {
-        const search = request.query.search; //recebe os valores do campo de pesquisa (search)
-        const anotacoes = await database.listNotes(search);
+    serverAnotacao.get('/anotacoes', async (request, reply) => {
+        const id = request.query.id; //recebe os valores do campo de pesquisa (id)
+        const anotacoes = await database.listNotes(id);
         return anotacoes;
     });
+    
 
     // Rota para atualizar uma anotação
-    server.put('/anotacoes/:id', async (request, reply) => {
+    serverAnotacao.put('/anotacoes/:id', async (request, reply) => {
      // Obtém o ID da anotação a partir da URL
         const anotacaoID = request.params.id
 
@@ -100,7 +99,7 @@ const noteRoutes = (server, database) => {
     });
 
     // Rota para deletar uma anotação
-    server.delete('/anotacoes/:id', async (request, reply) => {
+    serverAnotacao.delete('/anotacoes/:id', async (request, reply) => {
         const anotacaoID = request.params.id; //atribui o ID da anotação que foi passada
         await database.deleteNote(anotacaoID);
         return reply.status(204).send();

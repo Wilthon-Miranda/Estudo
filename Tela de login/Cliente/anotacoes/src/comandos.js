@@ -6,11 +6,26 @@ export const useAnotacoes = () => {
   const [textoAnotacoes, setTextoAnotacoes] = useState({});
   const [anotacoes, setAnotacoes] = useState([]);
 
+  const urlParams = new URLSearchParams(window.location.search); //Recebe todos os parametros do HTML
+  const id = urlParams.get('id');
+  if (!id) {
+    // Se não estiver, redireciona para a tela de login
+    window.location.href = "http://127.0.0.1:5500/Cliente/login/login.html";
+
+}
+
   useEffect(() => {
-    fetch("http://localhost:3000/anotacoes")
-      .then((response) => response.json())
-      .then((data) => setAnotacoes(data))
-      .catch((error) => console.error("Erro ao buscar anotações:", error));
+    // Obtém os parâmetros da URL
+    const urlParams = new URLSearchParams(window.location.search); //Recebe todos os parametros do HTML
+    const id = urlParams.get('id'); //coloca o parametro ID dentro de uma variavel
+  
+    // Faz a requisição fetch usando o ID
+    if (id) {
+      fetch(`http://localhost:3000/anotacoes?id=${id}`)
+        .then((response) => response.json())
+        .then((data) => setAnotacoes(data))
+        .catch((error) => console.error("Erro ao buscar anotações:", error));
+    }
   }, []);
 
   const ajustarAlturaDinamica = (id, tipo) => {
@@ -37,9 +52,11 @@ export const useAnotacoes = () => {
     ajustarAlturaDinamica(id, "texto");
   };
 
-  const salvarNovaAnotacao = async (tituloAnotacao, textoAnotacao) => {
-    let id_usuario = "3d927e4f-6932-495c-a5ac-5fff700dc9ca";
-    console.log("Atualizando anotação:", { id_usuario, tituloAnotacao, textoAnotacao });
+  const salvarNovaAnotacao = async () => {
+    const urlParams = new URLSearchParams(window.location.search); //Recebe todos os parametros do HTML
+    const id = urlParams.get('id'); //coloca o parametro ID dentro de uma variavel
+    let id_usuario = id;
+
     try {
       const response = await fetch("http://localhost:3000/anotacoes", {
         method: "POST",
@@ -55,24 +72,28 @@ export const useAnotacoes = () => {
       const anotacaoCriada = await response.json();
       setAnotacoes((prev) => [anotacaoCriada, ...prev]);
       setNovaAnotacao({ titulo: "", texto: "" });
+      window.location.href = `http://localhost:5173/Cliente/anotacoes/index.html?id=${encodeURIComponent(id)}`;
     } catch (error) {
       console.error("Erro ao salvar anotação:", error);
     }
   };
 
   const salvar = async (id_anotacao, tituloAnotacao, textoAnotacao) => {
-    console.log("Atualizando anotação:", { id_anotacao, tituloAnotacao, textoAnotacao });
+    const urlParams = new URLSearchParams(window.location.search); //Recebe todos os parametros do HTML
+    const id = urlParams.get('id'); //coloca o parametro ID dentro de uma variavel
+
     try {
       const response = await fetch(`http://localhost:3000/anotacoes/${id_anotacao}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-            titulo: tituloAnotacao, 
-            texto: textoAnotacao 
+        body: JSON.stringify({
+          titulo: tituloAnotacao,
+          texto: textoAnotacao
         }),
       });
       if (!response.ok) throw new Error("Erro ao atualizar anotação.");
-      window.alert(`Anotação ${id_anotacao} atualizada com sucesso!`);
+      window.alert(`Anotação ${tituloAnotacao} atualizada com sucesso!`);
+      window.location.href = `http://localhost:5173/Cliente/anotacoes/index.html?id=${encodeURIComponent(id)}`;
     } catch (error) {
       console.error("Erro ao salvar anotação:", error);
     }

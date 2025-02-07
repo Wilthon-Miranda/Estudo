@@ -59,16 +59,16 @@ export class DatabasePostgres {
 
 
     /*ANOTAÇÕES*/
-    async listNotes(search) {
+    async listNotes(id) {
         let anotacoes
     
-        if (search) {
+        if (id) {
             anotacoes = await sql`
             select *
             from anotacao
-            where id_usuario = ${search}
-             ORDER BY updated_at DESC
-            `   
+            where id_usuario = ${id}
+            ORDER BY updated_at DESC
+            `
         } else {
             anotacoes = await sql`
             select *
